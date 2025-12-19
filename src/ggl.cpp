@@ -667,6 +667,45 @@ void GRAY::drawCircle(short x0, short y0, short r, Color color)
 }
 void GRAY::drawTriangle(short x0, short y0, short x1, short y1, short x2, short y2, Color borderColor, Color fillColor)
 {
+    // Заполнение треугольника, если fillColor не равен WHITE
+  if (fillColor != WHITE)
+  {
+    // Находим bounding box треугольника
+    int minX = min(x0, min(x1, x2));
+    int maxX = max(x0, max(x1, x2));
+    int minY = min(y0, min(y1, y2));
+    int maxY = max(y0, max(y1, y2));
+
+    // Функция для проверки, находится ли точка внутри треугольника
+    auto pointInTriangle = [&](int x, int y) 
+    {
+      auto sign = [&](int x1, int y1, int x2, int y2, int x3, int y3) 
+      {
+        return (x1 - x3) * (y2 - y3) - (x2 - x3) * (y1 - y3);
+      };
+
+      float d1 = sign(x, y, x0, y0, x1, y1);
+      float d2 = sign(x, y, x1, y1, x2, y2);
+      float d3 = sign(x, y, x2, y2, x0, y0);
+
+      bool hasNeg = (d1 < 0) || (d2 < 0) || (d3 < 0);
+      bool hasPos = (d1 > 0) || (d2 > 0) || (d3 > 0);
+
+      return !(hasNeg && hasPos);
+    };
+
+    // Заполнение треугольника
+    for (int y = minY; y <= maxY; y++) // Перебор по вертикали
+    {
+      for (int x = minX; x <= maxX; x++) // Перебор по горизонтали
+      {
+        if (pointInTriangle(x, y)) // Если точка внутри треугольника
+        {
+          GRAY::drawPixel(x, y, fillColor); // Заполнение внутренней области
+        }
+      }
+    }
+  }
   // Функция для отрисовки линии между двумя точками
   auto drawLine = [&](short xStart, short yStart, short xEnd, short yEnd, Color color) {
     short dx = abs(xEnd - xStart);
@@ -700,44 +739,6 @@ void GRAY::drawTriangle(short x0, short y0, short x1, short y1, short x2, short 
   drawLine(x0, y0, x1, y1, borderColor); // Линия между (x0, y0) и (x1, y1)
   drawLine(x1, y1, x2, y2, borderColor); // Линия между (x1, y1) и (x2, y2)
   drawLine(x2, y2, x0, y0, borderColor); // Линия между (x2, y2) и (x0, y0)
-
-  // Заполнение треугольника, если fillColor не равен WHITE
-  if (fillColor != WHITE)
-  {
-    // Находим bounding box треугольника
-    int minX = min(x0, min(x1, x2));
-    int maxX = max(x0, max(x1, x2));
-    int minY = min(y0, min(y1, y2));
-    int maxY = max(y0, max(y1, y2));
-
-    // Функция для проверки, находится ли точка внутри треугольника
-    auto pointInTriangle = [&](int x, int y) {
-      auto sign = [](int x1, int y1, int x2, int y2, int x3, int y3) {
-        return (x1 - x3) * (y2 - y3) - (x2 - x3) * (y1 - y3);
-      };
-
-      float d1 = sign(x, y, x0, y0, x1, y1);
-      float d2 = sign(x, y, x1, y1, x2, y2);
-      float d3 = sign(x, y, x2, y2, x0, y0);
-
-      bool hasNeg = (d1 < 0) || (d2 < 0) || (d3 < 0);
-      bool hasPos = (d1 > 0) || (d2 > 0) || (d3 > 0);
-
-      return !(hasNeg && hasPos);
-    };
-
-    // Заполнение треугольника
-    for (int y = minY; y <= maxY; y++) // Перебор по вертикали
-    {
-      for (int x = minX; x <= maxX; x++) // Перебор по горизонтали
-      {
-        if (pointInTriangle(x, y)) // Если точка внутри треугольника
-        {
-          GRAY::drawPixel(x, y, fillColor); // Заполнение внутренней области
-        }
-      }
-    }
-  }
 }
 void GRAY::drawHLine(short x, short y, short length, Color color, int8_t w = 1)
 {
