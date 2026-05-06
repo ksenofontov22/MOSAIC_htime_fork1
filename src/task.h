@@ -147,7 +147,7 @@ void _info()
 
     String text1 = "Founder of the platform and\nchief developer: Aleksander SAVUSHKIN\n\n";
     String text2 = "Github: @avsavushkiny, GitVerse: @avsavushkin\n\n";
-    String text3 = "Developers: Sergey KSENOFONTOV, Michail SAMOYLOV,Aleksander MICHEEV, Ekaterina SYATKINA\n\n";
+    String text3 = "Developers: Sergey KSENOFONTOV, Michail SAMOYLOV, Aleksander MICHEEV, Ekaterina SYATKINA\n\n";
     String text4 = "Phone: +7 (953) 034 4001\nE-mail: aeondc@gmail.com\n\nSozvezdiye platform\nRussia, Saransk, 2023-2025";
 
     eTextBox *textBoxInfo = new eTextBox(text1 + text2 + text3 + text4, BorderStyle::noBorder, 256, 150, 0, 0);
@@ -465,7 +465,7 @@ TaskArguments system0[]
     // Добавление задачи мониторинга
     createTask("monitor", &monitorTask, NULL, SYSTEM, 0, true, PRIORITY_NORMAL, false, 100),
     // Cursor
-    createTask("cursor", &_systemCursor, NULL, SYSTEM, 0, true, PRIORITY_LOW, false, 10) // было 1
+    createTask("cursor", &_systemCursor, NULL, SYSTEM, 0, true, PRIORITY_LOW, false, 10)// было 1
 };
 
 /*

@@ -63,7 +63,7 @@ public:
     }
 
 private:
-    int m_valueContrast = 143;
+    int m_valueContrast = 50;
 };
 /* Управление режимами энергосбережения*/
 class ePowerSave : public eSystemElement
